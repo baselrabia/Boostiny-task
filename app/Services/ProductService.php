@@ -27,7 +27,8 @@ class ProductService
      */
     public function list()
     {
-        return $this->productRepo->query()->with('seller')->paginate(20);
+
+        return $this->productRepo->list();
     }
 
     /**
@@ -40,10 +41,4 @@ class ProductService
     {
         return $this->productRepo->find($id);
     }
-
-
-
-
-
-
 }

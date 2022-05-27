@@ -20,8 +20,8 @@ class ProductSeeder extends Seeder
         DB::table('products')->delete();
         DB::table('sellers')->delete();
 
-        Seller::factory()->times(10)->create()->each(function ($seller) {
-            Product::factory()->times(10)->create([
+        Seller::factory()->times(20)->create()->each(function ($seller) {
+            Product::factory()->times(500)->create([
                 'seller_id' => $seller->id,
             ]);
         });
