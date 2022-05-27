@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,7 +64,18 @@ Route::group(['middleware' => 'api'], function () {
         });
     });
 
-  
+
+    // products
+    Route::prefix('/products')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('products_list');
+        Route::get('/{product}', [ProductController::class, 'show'])->name('products_show');
+    });
 
 
+    //orders
+    Route::prefix('/orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('orders_list');
+        Route::get('/{order}', [OrderController::class, 'show'])->name('orders_show');
+        Route::post('/', [OrderController::class, 'store'])->name('orders_store');
+    });
 });

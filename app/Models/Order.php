@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
+    // one product
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    //one user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
 }

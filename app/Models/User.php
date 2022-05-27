@@ -44,4 +44,13 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    //many orders
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
+    
 }

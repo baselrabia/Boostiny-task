@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
+use App\Models\Seller;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
@@ -13,6 +16,15 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('orders')->delete();
+        DB::table('products')->delete();
+        DB::table('sellers')->delete();
+
+        Seller::factory()->times(10)->create()->each(function ($seller) {
+            Product::factory()->times(10)->create([
+                'seller_id' => $seller->id,
+            ]);
+        });
+
     }
 }
