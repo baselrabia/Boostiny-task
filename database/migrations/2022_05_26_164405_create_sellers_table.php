@@ -17,6 +17,8 @@ class CreateSellersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            //phone
+            $table->string('phone');
             $table->timestamps();
         });
     }

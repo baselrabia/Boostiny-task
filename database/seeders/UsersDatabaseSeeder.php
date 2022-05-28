@@ -20,6 +20,8 @@ class UsersDatabaseSeeder extends Seeder
     public function run()
     {
         DB::table('users')->delete();
+        DB::table('roles')->delete();
+        DB::table('permissions')->delete();
 
 
         DB::table('users')->insert([
