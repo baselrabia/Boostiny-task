@@ -38,7 +38,6 @@ Route::group(['middleware' => 'api'], function () {
         // authenticated routes
         Route::group(['middleware' => 'auth'], function () {
             Route::get('/', [UserController::class, 'index'])->name('users_list');
-
         });
     });
 
@@ -50,7 +49,6 @@ Route::group(['middleware' => 'api'], function () {
             Route::post('/', [PermissionController::class, 'store'])->name('permissions_store');
             Route::post('/assign/role', [PermissionController::class, 'assignToRole']);
             Route::post('/assign/user', [PermissionController::class, 'assignToUser']);
-
         });
     });
 
@@ -74,8 +72,11 @@ Route::group(['middleware' => 'api'], function () {
 
     //orders
     Route::prefix('/orders')->group(function () {
-        Route::get('/', [OrderController::class, 'index'])->name('orders_list');
-        Route::get('/{order}', [OrderController::class, 'show'])->name('orders_show');
-        Route::post('/', [OrderController::class, 'store'])->name('orders_store');
+        Route::group(['middleware' => 'auth'], function () {
+
+            Route::get('/', [OrderController::class, 'index'])->name('orders_list');
+            Route::get('/{order}', [OrderController::class, 'show'])->name('orders_show');
+            Route::post('/', [OrderController::class, 'store'])->name('orders_store');
+        });
     });
 });
