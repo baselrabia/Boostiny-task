@@ -22,7 +22,7 @@ class ProductRepository extends BaseRepository
     public function list()
     {
         $page = request()->page ?? 0;
-        // $cachedProducts = Cache::forget('products_' . $page);
+        request()->rm_cache ? Cache::forget('products_' . $page) : null;
         $cachedProducts = Cache::get('products_' . $page);
 
         if (isset($cachedProducts)) {
