@@ -40,6 +40,13 @@ class OrderService
         return $this->orderRepo->list();
     }
 
+    //ListUserOrders
+    public function ListUserOrders()
+    {
+        return $this->orderRepo->ListUserOrders();
+    }
+
+
     /**
      * Get order by id
      *

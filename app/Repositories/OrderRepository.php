@@ -17,6 +17,33 @@ class OrderRepository extends BaseRepository
         parent::__construct($orderModel);
     }
 
+    //ListUserOrders
+    public function ListUserOrders()
+    {
+        $user_id = auth()->user()->id;
+        // $cachedOrders = Cache::get('orders_user_' . $user_id);
+
+        // if (isset($cachedOrders)) {
+        //     echo "cache layer\n";
+        //     $orders = $cachedOrders;
+        // } else {
+        //     $orders = $this->query()->with('product')
+        //         ->where('user_id',$user_id)
+        //         ->orderBy('created_at', 'desc')
+        //         ->get();
+        //     Cache::set('orders_user_' . $user_id, $orders);
+        // }
+
+        $orders = cache::remember('orders_user_' . $user_id, 60 * 60, function () use ($user_id) {
+            return $this->query()->with('product')
+                ->where('user_id', $user_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        });
+
+        return $orders;
+    }
+
 
     //list
     public function list()
@@ -29,7 +56,7 @@ class OrderRepository extends BaseRepository
             echo "cache layer\n";
             $orders = $cachedOrders;
         } else {
-            $orders = $this->query()->with('seller')->paginate(50);
+            $orders = $this->query()->with('product')->orderBy('created_at', 'desc')->get();
             Cache::set('orders_' . $page, $orders);
         }
 

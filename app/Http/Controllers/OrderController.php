@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Resources\Order\ViewOrderResource;
 use App\Models\Order;
 use App\Services\OrderService;
 
@@ -29,7 +30,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders  = $this->orderService->ListUserOrders();
+        return ViewOrderResource::collection($orders);
     }
 
 
@@ -43,7 +45,7 @@ class OrderController extends Controller
     {
         try {
             $order = $this->orderService->createOrder($request->all());
-            return SuccessResponse($order, 'Created Successfully');
+            return SuccessResponse(new ViewOrderResource($order), 'Created Successfully');
         } catch (\Exception $e) {
             return ErrorResponse($e->getMessage());
         }
@@ -57,6 +59,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        if(auth()->user()->id != $order->user_id){
+            return ErrorResponse('You are not authorized to view this order');
+        }
+        return SuccessResponse(new ViewOrderResource($order), 'Created Successfully');
     }
 }
