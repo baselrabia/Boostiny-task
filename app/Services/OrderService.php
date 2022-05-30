@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Events\OrderCreatedEvent;
 use App\Factories\PaymentFactory;
 use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
@@ -75,12 +77,16 @@ class OrderService
 
             $payment = $this->payment->make($data['payment_method']);
             $payment->createPayment($order);
-            
+
             DB::commit();
         }catch (\Exception $e){
             DB::rollBack();
+            Log::critical($e);
             throw new \Exception('Error creating order : ' . $e->getMessage());
         }
+
+        //event fire to push notification to seller
+        event(new OrderCreatedEvent($order));
 
         return $order;
 
